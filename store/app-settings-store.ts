@@ -5,22 +5,23 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 type ThemeStoreState = {
   theme: "dark" | "light" | null;
+  dynamicColors:boolean;
   localBackupPath: string | null;
   lastBackup: Date | null;
-  
-  // Actions
-  setTheme: (theme: "dark" | "light" | null) => void;
+  toggleDynamicColors: () => void;
   toggleTheme: () => void;
 };
 
-export const useThemeStore = create<ThemeStoreState>()(
+export const useSettingsStore = create<ThemeStoreState>()(
   persist(
     (set, get) => ({
       theme: null,
+      dynamicColors: true,
       localBackupPath: null,
       lastBackup: null,
-      
-      setTheme: (theme) => set({ theme }),
+      toggleDynamicColors: () => set((state) => ({ 
+        dynamicColors: !state.dynamicColors 
+      })),
       toggleTheme: () => set((state) => ({ 
         theme: state.theme === "light" ? "dark" : "light" 
       })),
@@ -34,7 +35,7 @@ export const useThemeStore = create<ThemeStoreState>()(
 
 export function useStoredTheme() {
   const colorScheme = useColorScheme();
-  const { theme, setTheme, toggleTheme } = useThemeStore();
+  const { theme,  toggleTheme } = useSettingsStore();
 
   // Use the device color scheme as fallback if theme is null
   const effectiveTheme = theme ?? colorScheme ?? "light";
@@ -42,7 +43,6 @@ export function useStoredTheme() {
 
   return {
     theme: effectiveTheme,
-    setTheme,
     toggleTheme,
     isDarkMode,
   };

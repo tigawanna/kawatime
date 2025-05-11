@@ -4,14 +4,15 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { useThemeSetup } from '@/hooks/useThemeSetup';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
+import { useSettingsStore } from '@/store/app-settings-store';
 
 export default function RootLayout() {
-  // const colorScheme = useColorScheme();
-    const { colorScheme, paperTheme } = useThemeSetup();
+   const dynamicColors = useSettingsStore((state)=>state.dynamicColors)
+    const { colorScheme, paperTheme } = useThemeSetup(dynamicColors);
+    
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });

@@ -10,11 +10,11 @@ import {
   MD3LightTheme,
 } from "react-native-paper";
 
-import { useStoredTheme } from "@/store/theme-store";
+import { useStoredTheme } from "@/store/app-settings-store";
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import merge from "deepmerge";
 
-export function useThemeSetup() {
+export function useThemeSetup(dynamicColors?:boolean) {
   // Get device-generated Material You theme
   const { theme: material3Theme } = useMaterial3Theme();
   
@@ -22,8 +22,8 @@ export function useThemeSetup() {
   const { theme: userThemePreference, isDarkMode } = useStoredTheme();
 
   // Define custom themes (fallback if Material You theme is unavailable)
-  const customDefaultTheme = { ...MD3LightTheme, colors: Colors.light };
-  const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
+  // const customDefaultTheme = { ...MD3LightTheme, colors: Colors.light };
+  // const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
   
   // Navigation themes
   const { DarkTheme, LightTheme } = adaptNavigationTheme({
@@ -31,12 +31,9 @@ export function useThemeSetup() {
     reactNavigationDark: NavigationDarkTheme,
   });
   
-console.log(" mui theme primary ===", MD3LightTheme.colors.primary)
-console.log(" default theme primary ===", customDefaultTheme.colors.primary);
-
   // Use Material You theme if available, otherwise fall back to custom theme
-  const lightThemeColors = material3Theme?.light || customDefaultTheme.colors;
-  const darkThemeColors = material3Theme?.dark || customDarkTheme.colors;
+  const lightThemeColors = dynamicColors ? material3Theme?.light || Colors.light : Colors.light;
+  const darkThemeColors = dynamicColors ?(material3Theme?.dark || Colors.dark):Colors.dark
 
   // Create combined themes (Material You or fallback)
   const lightBasedTheme = merge(LightTheme, { 
