@@ -15,11 +15,14 @@ export function ThemedText({
   type = 'default',
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const themeColor = useThemeColor({ light: lightColor, dark: darkColor }, 'surface');
+  // Handle case when color is an object (use level0 or convert to string)
+  const color = typeof themeColor === 'object' ? themeColor.level0 : themeColor;
 
   return (
     <Text
       style={[
+        
         { color },
         type === 'default' ? styles.default : undefined,
         type === 'title' ? styles.title : undefined,

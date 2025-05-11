@@ -9,6 +9,9 @@ export type ThemedViewProps = ViewProps & {
 
 export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  
+  // Ensure backgroundColor is a string type
+  const bgColor = typeof backgroundColor === 'string' ? backgroundColor : backgroundColor.level0;
 
-  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+  return <View style={[{ backgroundColor: bgColor }, style]} {...otherProps} />;
 }
