@@ -10,16 +10,18 @@ import {
   MD3LightTheme,
 } from "react-native-paper";
 
-import { useStoredTheme } from "@/store/app-settings-store";
+import { useThemeStore } from "@/store/app-settings-store";
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import merge from "deepmerge";
 
 export function useThemeSetup(dynamicColors?:boolean) {
   // Get device-generated Material You theme
-  const { theme: material3Theme } = useMaterial3Theme();
+  const { theme: material3Theme } = useMaterial3Theme(
+    {fallbackSourceColor: Colors.light.primary},
+  );
   
   // Get stored theme preference
-  const { theme: userThemePreference, isDarkMode } = useStoredTheme();
+  const { theme: userThemePreference, isDarkMode } = useThemeStore();
 
   // Define custom themes (fallback if Material You theme is unavailable)
   // const customDefaultTheme = { ...MD3LightTheme, colors: Colors.light };

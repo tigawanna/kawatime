@@ -10,8 +10,8 @@ import { PaperProvider } from 'react-native-paper';
 import { useSettingsStore } from '@/store/app-settings-store';
 
 export default function RootLayout() {
-   const dynamicColors = useSettingsStore((state)=>state.dynamicColors)
-    const { colorScheme, paperTheme } = useThemeSetup(dynamicColors);
+   const {settings} = useSettingsStore()
+    const { colorScheme, paperTheme } = useThemeSetup(settings.dynamicColors);
     
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),

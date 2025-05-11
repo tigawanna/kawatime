@@ -1,10 +1,10 @@
-import { useSettingsStore, useStoredTheme } from "@/store/app-settings-store";
+import { useSettingsStore, useThemeStore } from "@/store/app-settings-store";
 import { ScrollView, StyleSheet } from "react-native";
 import { Divider, List, Switch } from "react-native-paper";
 
 export default function Settings() {
-  const { isDarkMode, toggleTheme } = useStoredTheme();
-  const { dynamicColors, toggleDynamicColors } = useSettingsStore();
+  const { isDarkMode, toggleTheme } = useThemeStore();
+  const { settings:{dynamicColors, toggleDynamicColors }} = useSettingsStore();
 
   return (
     <ScrollView style={[styles.container]}>

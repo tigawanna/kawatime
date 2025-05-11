@@ -1,49 +1,60 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from 'react-native';
-import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { observable } from "@legendapp/state";
+import { use$ } from "@legendapp/state/react";
+import { syncObservable } from "@legendapp/state/sync";
+import { ObservablePersistLocalStorage } from "@legendapp/state/persist-plugins/local-storage";
 
-type ThemeStoreState = {
+
+
+type SettingsStoreType = {
   theme: "dark" | "light" | null;
-  dynamicColors:boolean;
   localBackupPath: string | null;
-  lastBackup: Date | null;
+  dynamicColors: boolean;
   toggleDynamicColors: () => void;
   toggleTheme: () => void;
+  lastBackup: Date | null;
 };
 
-export const useSettingsStore = create<ThemeStoreState>()(
-  persist(
-    (set, get) => ({
-      theme: null,
-      dynamicColors: true,
-      localBackupPath: null,
-      lastBackup: null,
-      toggleDynamicColors: () => set((state) => ({ 
-        dynamicColors: !state.dynamicColors 
-      })),
-      toggleTheme: () => set((state) => ({ 
-        theme: state.theme === "light" ? "dark" : "light" 
-      })),
-    }),
-    {
-      name: 'theme-storage', // unique name for the storage
-      storage: createJSONStorage(() => AsyncStorage),
-    }
-  )
-);
+// Observables can be primitives or deep objects
+export const settings$ = observable<SettingsStoreType>({
+  theme: null,
+  localBackupPath: null,
+  dynamicColors: true,
+  toggleDynamicColors: () => {
+    settings$.dynamicColors.set(!settings$.dynamicColors.get());
+  },
+  toggleTheme: () => {
+    settings$.theme.set(
+      settings$.theme.get() === "light" ? "dark" : "light"
+    );
+  },
+  lastBackup: null,
+});
 
-export function useStoredTheme() {
-  const colorScheme = useColorScheme();
-  const { theme,  toggleTheme } = useSettingsStore();
+syncObservable(settings$, {
+  persist: {
+    name: "app-settings",
+    plugin: ObservablePersistLocalStorage,
+  },
+});
 
-  // Use the device color scheme as fallback if theme is null
-  const effectiveTheme = theme ?? colorScheme ?? "light";
-  const isDarkMode = effectiveTheme === "dark";
-
-  return {
-    theme: effectiveTheme,
-    toggleTheme,
-    isDarkMode,
+export function useSettingsStore() {
+  const settings = use$(() => settings$.get());
+  const updateSettings = (value: Partial<SettingsStoreType>) => {
+    settings$.set({ ...settings, ...value });
   };
+  return { settings, updateSettings };
+}
+
+export function useThemeStore() {
+  const colorScheme = useColorScheme();
+  const theme = use$(() => settings$.theme.get()) ?? colorScheme;
+  const setTheme = (value: SettingsStoreType["theme"]) => {
+    settings$.theme.set(value);
+  };
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+  const isDarkMode = theme === "dark";
+  return { theme, toggleTheme, isDarkMode };
 }
