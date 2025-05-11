@@ -1,75 +1,95 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+import { Button, Card, Divider, Surface, Text, useTheme } from "react-native-paper";
 
 export default function HomeScreen() {
+  const theme = useTheme();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <Surface style={styles.container}>
+      <Surface style={styles.header} elevation={0}>
+        <Text variant="headlineMedium" style={styles.title}>Kawatime</Text>
+        <Text variant="bodyMedium" style={styles.subtitle}>Welcome to your daily companion</Text>
+      </Surface>
+
+      <Card style={styles.card} mode="elevated">
+        <Card.Content style={styles.cardContent}>
+          <MaterialCommunityIcons name="chart-timeline-variant" size={32} color={theme.colors.primary} />
+          <Text variant="titleMedium" style={styles.cardTitle}>Your Activity</Text>
+          <Text variant="bodyMedium">Track your daily progress and achievements</Text>
+        </Card.Content>
+        <Card.Actions>
+          <Button mode="text">View Details</Button>
+        </Card.Actions>
+      </Card>
+      
+      <Card style={styles.card} mode="elevated">
+        <Card.Content style={styles.cardContent}>
+          <MaterialCommunityIcons name="calendar-check" size={32} color={theme.colors.primary} />
+          <Text variant="titleMedium" style={styles.cardTitle}>Today&apos;s Plan</Text>
+          <Text variant="bodyMedium">2 tasks remaining for today</Text>
+        </Card.Content>
+        <Card.Actions>
+          <Button mode="text">View Tasks</Button>
+        </Card.Actions>
+      </Card>
+
+      <Divider style={styles.divider} />
+
+      <Surface style={styles.footer} elevation={0}>
+        <Button 
+          mode="contained" 
+          icon="logout-variant" 
+          style={styles.button}
+          contentStyle={styles.buttonContent}
+          onPress={() => {}}
+        >
+          Logout
+        </Button>
+      </Surface>
+    </Surface>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  header: {
+    alignItems: "center",
+    marginVertical: 24,
+  },
+  title: {
+    fontWeight: "bold",
+  },
+  subtitle: {
+    marginTop: 4,
+    opacity: 0.7,
+  },
+  card: {
+    marginVertical: 8,
+    borderRadius: 12,
+  },
+  cardContent: {
     gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  cardTitle: {
+    fontWeight: "bold",
+    marginTop: 4,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  divider: {
+    marginVertical: 24,
   },
+  footer: {
+    marginTop: 'auto',
+    alignItems: "center",
+  },
+  button: {
+    width: "80%",
+    borderRadius: 8,
+  },
+  buttonContent: {
+    height: 48,
+  }
 });
