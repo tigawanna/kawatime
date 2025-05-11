@@ -1,19 +1,18 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol, MaterialIcon } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { useTheme } from 'react-native-paper';
+import {  useTheme } from 'react-native-paper';
 
 export default function TabLayout() {
   const { colors } = useTheme();
-
   return (
     <Tabs
       screenOptions={{
-  
+        //        headerShown: false, // Hide headers for all tab screens
         headerStyle: {
           backgroundColor: colors.surface,
         },
@@ -33,6 +32,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
+
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />

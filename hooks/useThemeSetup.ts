@@ -17,7 +17,7 @@ import merge from "deepmerge";
 export function useThemeSetup(dynamicColors?:boolean) {
   // Get device-generated Material You theme
   const { theme: material3Theme } = useMaterial3Theme(
-    {fallbackSourceColor: Colors.light.primary},
+    // {fallbackSourceColor: Colors.light.primary},
   );
   
   // Get stored theme preference
