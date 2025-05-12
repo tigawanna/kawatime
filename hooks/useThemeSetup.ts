@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors, defaultPaperTheme } from "@/constants/Colors";
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
@@ -11,7 +11,7 @@ import {
 } from "react-native-paper";
 
 import { useThemeStore } from "@/store/app-settings-store";
-import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
+import { Material3Theme, useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import merge from "deepmerge";
 
 export function useThemeSetup(dynamicColors?:boolean) {
@@ -23,19 +23,15 @@ export function useThemeSetup(dynamicColors?:boolean) {
   // Get stored theme preference
   const { theme: userThemePreference, isDarkMode } = useThemeStore();
 
-  // Define custom themes (fallback if Material You theme is unavailable)
-  // const customDefaultTheme = { ...MD3LightTheme, colors: Colors.light };
-  // const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
-  
-  // Navigation themes
+
   const { DarkTheme, LightTheme } = adaptNavigationTheme({
     reactNavigationLight: NavigationDefaultTheme,
     reactNavigationDark: NavigationDarkTheme,
   });
   
   // Use Material You theme if available, otherwise fall back to custom theme
-  const lightThemeColors = dynamicColors ? material3Theme?.light || Colors.light : Colors.light;
-  const darkThemeColors = dynamicColors ?(material3Theme?.dark || Colors.dark):Colors.dark
+  const lightThemeColors = dynamicColors ? materialYouThemeOrMyTheme(material3Theme).light : Colors.light;
+  const darkThemeColors = dynamicColors ? materialYouThemeOrMyTheme(material3Theme).dark :Colors.dark
 
   // Create combined themes (Material You or fallback)
   const lightBasedTheme = merge(LightTheme, { 
@@ -56,4 +52,19 @@ export function useThemeSetup(dynamicColors?:boolean) {
     colorScheme: userThemePreference,
     isDarkMode
   };
+}
+
+
+function materialYouThemeOrMyTheme(theme: Material3Theme) {
+  if(theme.dark.primary === defaultPaperTheme.dark.primary && theme.light.primary === defaultPaperTheme.light.primary){
+    return {
+      light: Colors.light,
+      dark: Colors.dark
+    }
+  } else {
+    return {
+      light: theme.light,
+      dark: theme.dark
+    }
+  }
 }
