@@ -117,6 +117,9 @@ importers:
       '@babel/core':
         specifier: ^7.25.2
         version: 7.27.1
+      '@expo/server':
+        specifier: ^0.6.2
+        version: 0.6.2
       '@tanstack/eslint-plugin-query':
         specifier: ^5.74.7
         version: 5.74.7(eslint@9.26.0)(typescript@5.8.3)

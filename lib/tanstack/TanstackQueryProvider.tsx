@@ -23,5 +23,5 @@ export default function TanstackQueryProvider({ children }: TanstackQueryProvide
   useOnlineManager();
   useAppState(onAppStateChange);
 
-  return <QueryClientProvider client={queryClient}>{children} </QueryClientProvider>;
+  return {children} ;
 }
