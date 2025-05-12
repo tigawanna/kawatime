@@ -39,6 +39,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "907519f8-80a9-4814-8fa3-544d50ca6d1d"
+      }
+    },
+    "owner": "tigawana"
   }
 }
