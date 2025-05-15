@@ -2,8 +2,8 @@ import { wakatimePiKey } from "@/env";
 import { getTodaysWakatimeDurations } from "@/lib/wakatime/apis";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useEffect,useState } from "react";
-import {  RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { Card, Surface, Text, useTheme } from "react-native-paper";
 
 import Animated, {
@@ -23,18 +23,14 @@ export type ProjectSummary = {
   percentage: number;
 };
 
-interface DailyCodingDurationProps{
+interface DailyCodingDurationProps {
   today: Date | undefined;
 }
 
-export function 
-DailyCodingDuration({
-  today = new Date(),
-}: DailyCodingDurationProps) {
+export function DailyCodingDuration({ today = new Date() }: DailyCodingDurationProps) {
   const theme = useTheme();
   const [refreshing, setRefreshing] = useState(false);
-
-  const { data,error, isError, refetch } = useSuspenseQuery({
+  const { data, error, isError, refetch } = useSuspenseQuery({
     queryKey: ["duration", today],
     queryFn: async () => {
       return getTodaysWakatimeDurations({
@@ -44,7 +40,7 @@ DailyCodingDuration({
     },
     staleTime: 15 * 60 * 1000, // 15 minutes
   });
-
+  // console.log("data", data);
   // Handle refresh action
   const onRefresh = async () => {
     setRefreshing(true);
@@ -55,62 +51,70 @@ DailyCodingDuration({
     data: data?.data,
     theme,
   });
+  const durationData = sortedProjects;
+  if (!durationData || durationData.length === 0) {
+    return (
+      <View style={styles.loadingContainer}>
+        <MaterialCommunityIcons name="alert-circle-outline" size={48} color={theme.colors.error} />
+        <Text variant="bodyMedium" style={styles.loadingText}>
+          No data available for today.
+        </Text>
+      </View>
+    );
+  }
+  const errprMessage = data?.error || error?.message;
+  if (errprMessage) {
+    return (
+      <View style={styles.loadingContainer}>
+        <MaterialCommunityIcons name="alert-circle-outline" size={48} color={theme.colors.error} />
+        <Text variant="bodyMedium" style={styles.loadingText}>
+          {errprMessage || "Failed to load data"}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <Surface style={styles.container}>
-      {(isError || data?.error) ? (
-        <View style={styles.errorContainer}>
-          <MaterialCommunityIcons
-            name="alert-circle-outline"
-            size={48}
-            color={theme.colors.error}
-          />
-          <Text variant="bodyMedium" style={styles.errorText}>
-            {error instanceof Error ? error.message : "Failed to load data"}
-            {data.error}
+      <View style={styles.content}>
+        <Animated.View style={styles.totalTimeContainer} entering={FadeIn.duration(800)}>
+          <Text variant="headlineLarge" style={styles.totalTime}>
+            {formatDuration(totalTime)}
           </Text>
-        </View>
-      ) : (
-        <View style={styles.content}>
-          <Animated.View style={styles.totalTimeContainer} entering={FadeIn.duration(800)}>
-            <Text variant="headlineLarge" style={styles.totalTime}>
-              {formatDuration(totalTime)}
+          <View style={{}}>
+            <Text variant="bodyMedium" style={styles.totalTimeLabel}>
+              {nameOfDayToday(new Date(today))}
             </Text>
-            <View style={{}}>
-              <Text variant="bodyMedium" style={styles.totalTimeLabel}>
-                {nameOfDayToday(new Date(today))}
-              </Text>
-            </View>
-          </Animated.View>
+          </View>
+        </Animated.View>
 
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Projects
-          </Text>
+        <Text variant="titleMedium" style={styles.sectionTitle}>
+          Projects
+        </Text>
 
-          <ScrollView
-            style={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={[theme.colors.primary]}
-                tintColor={theme.colors.primary}
-              />
-            }>
-            {sortedProjects.map((project, index) => (
-              <AnimatedProjectCard
-                key={`project-${index}`}
-                project={project}
-                index={index}
-                formatDuration={formatDuration}
-                theme={theme}
-              />
-            ))}
-          </ScrollView>
-        </View>
-      )}
+        <ScrollView
+          style={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.primary]}
+              tintColor={theme.colors.primary}
+            />
+          }>
+          {durationData.map((project, index) => (
+            <AnimatedProjectCard
+              key={`project-${index}`}
+              project={project}
+              index={index}
+              formatDuration={formatDuration}
+              theme={theme}
+            />
+          ))}
+        </ScrollView>
+      </View>
     </Surface>
   );
 }
