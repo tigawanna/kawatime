@@ -26,10 +26,16 @@ export async function getTodaysWakatimeDurations({api_key,date}:GetTodaysWakatim
     `https://wakatime.com/api/v1/users/current/durations?date=${durationDate}&api_key=${api_key}`
   );
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    return {
+      data: null,
+      error: response.statusText
+    };
   }
   const data = await response.json();
-  return data as GetTodaysWakatimeDurationsResponse;
+  return {
+    data:data as GetTodaysWakatimeDurationsResponse,
+    error: null,
+  }
 }
 
 

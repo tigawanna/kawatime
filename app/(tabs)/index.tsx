@@ -1,15 +1,12 @@
-import { Duration } from "@/components/wakatime/Duration";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { DailyDuration } from "@/components/wakatime/DailyDuration";
 import { StyleSheet } from "react-native";
-import { Button, Card, Divider, Surface, Text, useTheme } from "react-native-paper";
+import { Surface } from "react-native-paper";
 
 export default function HomeScreen() {
-  const theme = useTheme();
-
   return (
     <Surface style={styles.container}>
-      <Duration />
-   </Surface>
+      <DailyDuration />
+    </Surface>
   );
 }
 
