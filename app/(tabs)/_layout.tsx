@@ -6,6 +6,7 @@ import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol, MaterialIcon } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import {  useTheme } from 'react-native-paper';
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function TabLayout() {
   const { colors } = useTheme();
@@ -37,10 +38,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="github"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Github",
+          tabBarIcon: ({ color }) => <AntDesign name="github" size={24} color={color} />,
         }}
       />
       <Tabs.Screen

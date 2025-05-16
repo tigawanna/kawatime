@@ -25,7 +25,7 @@ export function DatePicker({ today, setToday }: DatePickerProps) {
   return (
     <View style={{ justifyContent: "center", height: 50, alignItems: "center" }}>
       <DatePickerInput
-        locale="en-US"
+        locale="en-GB"
         label="Select date"
         value={inputDate}
         onChange={(d) => setInputDate(d)}
