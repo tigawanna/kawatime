@@ -30,8 +30,9 @@ interface DailyCodingDurationProps {
 export function DailyCodingDuration({ today = new Date() }: DailyCodingDurationProps) {
   const theme = useTheme();
   const [refreshing, setRefreshing] = useState(false);
-  const { data, error, isError, refetch } = useSuspenseQuery({
+  const { data, error, refetch } = useSuspenseQuery({
     queryKey: ["duration", today],
+    refetchInterval: 5 * 60 * 1000, // 5 minutes
     queryFn: async () => {
       return getTodaysWakatimeDurations({
         api_key: wakatimePiKey!,
@@ -147,7 +148,12 @@ function AnimatedProjectCard({
 
   return (
     <Animated.View entering={SlideInRight.delay(index * 100).springify()}>
-      <Card style={styles.projectCard} mode="outlined">
+      <Card
+        style={{
+          marginBottom: 12,
+          borderRadius: 8,
+        }}
+        mode="outlined">
         <Card.Content>
           <View style={styles.projectHeader}>
             <View style={styles.projectInfo}>
@@ -240,10 +246,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontWeight: "bold",
     marginBottom: 16,
-  },
-  projectCard: {
-    marginBottom: 12,
-    borderRadius: 8,
   },
   projectHeader: {
     flexDirection: "row",

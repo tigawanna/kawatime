@@ -1,5 +1,5 @@
 import { Suspense, useState, useTransition } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text, Surface, useTheme } from "react-native-paper";
 import { DailyCodingDuration } from "./DailyCodingDuration";
 import { DatePicker } from "./DatPicker";
@@ -10,12 +10,11 @@ export function DailyDuration() {
     const [isTransitioning, startTransition] = useTransition();
   return (
     <Surface style={{ ...styles.container }}>
-     <DatePicker today={today} setToday={
-        (d)=>startTransition(() => setToday(d))
-     } />
-     <Nprogress isAnimating={isTransitioning}/>
+      <DatePicker today={today} setToday={(d) => startTransition(() => setToday(d))} />
+      <Nprogress isAnimating={isTransitioning} />
+      {/* <DailyDurationSuspenseFallback /> */}
       <Suspense fallback={<DailyDurationSuspenseFallback />}>
-        <DailyCodingDuration today={today}/>
+        <DailyCodingDuration today={today} />
       </Suspense>
     </Surface>
   );
@@ -24,7 +23,8 @@ export function DailyDuration() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 8,
+    gap: 6,
+    padding: 16,
     height: "100%",
     width: "100%",
     justifyContent: "center",
@@ -35,19 +35,19 @@ const styles = StyleSheet.create({
 export function DailyDurationSuspenseFallback() {
   const theme = useTheme();
   return (
-    <Surface style={{ ...styles.container, backgroundColor: theme.colors.surface }}>
-      {Array.from({ length: 5 }).map((_, index) => (
+    <Surface style={{ ...styles.container, }}>
+      {Array.from({ length: 3 }).map((_, index) => (
         <Surface
           key={index}
           style={{
             ...styles.container,
-            backgroundColor: theme.colors.primaryContainer,
+            backgroundColor: theme.colors.elevation.level4,
             marginVertical: 8,
-            borderRadius: 12,
+            borderRadius: 6,
+            padding: 50,
           }}>
-          <Text variant="titleLarge" style={{ color: theme.colors.onPrimaryContainer }}>
-            Loading...
-          </Text>
+          <View  style={{ backgroundColor: theme.colors.elevation.level2 }}/>
+
         </Surface>
       ))}
     </Surface>
