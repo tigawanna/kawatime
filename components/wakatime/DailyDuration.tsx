@@ -1,6 +1,6 @@
 import { Suspense, useState, useTransition } from "react";
 import { StyleSheet, View } from "react-native";
-import { Text, Surface, useTheme } from "react-native-paper";
+import { Surface, useTheme } from "react-native-paper";
 import { DailyCodingDuration } from "./DailyCodingDuration";
 import { DatePicker } from "./DatPicker";
 import Nprogress from "../nprogress/Nprogress";
@@ -12,7 +12,6 @@ export function DailyDuration() {
     <Surface style={{ ...styles.container }}>
       <DatePicker today={today} setToday={(d) => startTransition(() => setToday(d))} />
       <Nprogress isAnimating={isTransitioning} />
-      {/* <DailyDurationSuspenseFallback /> */}
       <Suspense fallback={<DailyDurationSuspenseFallback />}>
         <DailyCodingDuration today={today} />
       </Suspense>
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
 export function DailyDurationSuspenseFallback() {
   const theme = useTheme();
   return (
-    <Surface style={{ ...styles.container, }}>
+    <Surface style={{ flex:1,width:"100%",height:"100%" }}>
       {Array.from({ length: 3 }).map((_, index) => (
         <Surface
           key={index}

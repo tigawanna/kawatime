@@ -186,3 +186,7 @@ export const defaultPaperTheme = {
     backdrop: "rgba(51, 47, 55, 0.4)",
   },
 };
+
+
+export const defaultMaterial3PrimaryLightTheme = "#6750A4";
+export const defaultMaterial3PrimaryDarkTheme = "#CFBCFF";

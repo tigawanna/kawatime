@@ -7,15 +7,6 @@ export default function ExploreScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      {/* <Surface style={styles.header} elevation={0}>
-        <Text variant="headlineMedium" style={styles.title}>
-          Explore
-        </Text>
-        <Text variant="bodyMedium" style={styles.subtitle}>
-          Discover new experiences
-        </Text>
-      </Surface> */}
-
       <Surface style={styles.chipContainer} elevation={0}>
         <ScrollView
           horizontal
@@ -110,7 +101,7 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 24,
   },
   header: {
     marginVertical: 16,

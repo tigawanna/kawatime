@@ -1,4 +1,4 @@
-import { Colors, defaultPaperTheme } from "@/constants/Colors";
+import { Colors, defaultMaterial3PrimaryDarkTheme, defaultMaterial3PrimaryLightTheme, defaultPaperTheme } from "@/constants/Colors";
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
@@ -19,7 +19,7 @@ export function useThemeSetup(dynamicColors?:boolean) {
   const { theme: material3Theme } = useMaterial3Theme(
     // {fallbackSourceColor: Colors.light.primary},
   );
-  
+  console.log("Material You Theme", material3Theme.light.primary);
   // Get stored theme preference
   const { theme: userThemePreference, isDarkMode } = useThemeStore();
 
@@ -56,15 +56,18 @@ export function useThemeSetup(dynamicColors?:boolean) {
 
 
 function materialYouThemeOrMyTheme(theme: Material3Theme) {
-  if(theme.dark.primary === defaultPaperTheme.dark.primary && theme.light.primary === defaultPaperTheme.light.primary){
+  if (
+    theme.dark.primary === defaultMaterial3PrimaryDarkTheme &&
+    theme.light.primary === defaultMaterial3PrimaryLightTheme
+  ) {
     return {
       light: Colors.light,
-      dark: Colors.dark
-    }
+      dark: Colors.dark,
+    };
   } else {
     return {
       light: theme.light,
-      dark: theme.dark
-    }
+      dark: theme.dark,
+    };
   }
 }

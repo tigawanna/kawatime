@@ -1,7 +1,7 @@
 import { wakatimePiKey } from "@/env";
 import { getTodaysWakatimeDurations } from "@/lib/wakatime/apis";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { Card, Surface, Text, useTheme } from "react-native-paper";
@@ -15,6 +15,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { formatDuration, formrtDateFprWakatime, nameOfDayToday } from "@/utils/dates";
 import { useGroupedDurationData } from "./utils/use-data";
+import { DailyDurationSuspenseFallback } from "./DailyDuration";
 
 export type ProjectSummary = {
   name: string;
@@ -30,7 +31,7 @@ interface DailyCodingDurationProps {
 export function DailyCodingDuration({ today = new Date() }: DailyCodingDurationProps) {
   const theme = useTheme();
   const [refreshing, setRefreshing] = useState(false);
-  const { data, error, refetch } = useSuspenseQuery({
+  const { data, error, refetch,isRefetching, isLoading } = useQuery({
     queryKey: ["duration", today],
     refetchInterval: 5 * 60 * 1000, // 5 minutes
     queryFn: async () => {
@@ -52,6 +53,12 @@ export function DailyCodingDuration({ today = new Date() }: DailyCodingDurationP
     data: data?.data,
     theme,
   });
+
+  if(isLoading && !isRefetching) {
+    return(
+      <DailyDurationSuspenseFallback />
+    )
+  }
   const durationData = sortedProjects;
   if (!durationData || durationData.length === 0) {
     return (

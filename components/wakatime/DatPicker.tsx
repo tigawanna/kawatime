@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { View } from "react-native";
-import { DatePickerInput } from "react-native-paper-dates";
+import { DatePickerInput, enGB, registerTranslation } from "react-native-paper-dates";
 import { useDebounce } from "@uidotdev/usehooks";
 
+registerTranslation("en-GB", enGB);
 
 interface DatePickerProps {
   today: Date | undefined;
@@ -24,7 +25,7 @@ export function DatePicker({ today, setToday }: DatePickerProps) {
   return (
     <View style={{ justifyContent: "center", height: 50, alignItems: "center" }}>
       <DatePickerInput
-        locale="en"
+        locale="en-US"
         label="Select date"
         value={inputDate}
         onChange={(d) => setInputDate(d)}
